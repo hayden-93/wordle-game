@@ -1,15 +1,10 @@
 import React from 'react';
-import Letter from './components/Letter/Letter';
-import { AccuracyEnum } from './components/Letter/Letter.styles';
+import Word from './components/Word/Word';
 
 function App() {
   return (
     <div>
-      <Letter accuracy={AccuracyEnum.correct} position={0} value='R' />
-      <Letter accuracy={AccuracyEnum.doesNotExist} position={1} value='E' />
-      <Letter accuracy={AccuracyEnum.wrongPosition} position={2} value='A' />
-      <Letter accuracy={AccuracyEnum.wrongPosition} position={3} value='C' />
-      <Letter accuracy={AccuracyEnum.correct} position={4} value='T' />
+      <Word isWordEvaluated={false} guessWordValue='TESTS' />
     </div>
   );
 }
