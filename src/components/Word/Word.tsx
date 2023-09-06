@@ -1,4 +1,6 @@
 import React from 'react';
+import Letter from '../Letter/Letter';
+import { AccuracyEnum } from '../Letter/Letter.styles';
 
 export interface IWordProps {
   isWordEvaluated: boolean;
@@ -6,8 +8,8 @@ export interface IWordProps {
 }
 
 export default function Word({ isWordEvaluated, guessWordValue }: IWordProps) {
-  const [isEvaluated, setIsEvaluated] = React.useState(false);
-  const [guessValue, setGuessValue] = React.useState('');
+  const [isEvaluated, setIsEvaluated] = React.useState(isWordEvaluated);
+  const [guessValue, setGuessValue] = React.useState(guessWordValue);
 
   React.useEffect(() => {
     setGuessValue(guessWordValue);
@@ -18,7 +20,19 @@ export default function Word({ isWordEvaluated, guessWordValue }: IWordProps) {
 
   return (
     <>
-      <></>
+      {guessValue
+        .toUpperCase()
+        .split('')
+        .map((nextLetter, letterIndex) => {
+          return (
+            <Letter
+              key={'letter_' + letterIndex}
+              position={letterIndex}
+              value={nextLetter}
+              accuracy={AccuracyEnum.None}
+            />
+          );
+        })}
     </>
   );
 }
