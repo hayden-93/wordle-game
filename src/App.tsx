@@ -1,10 +1,13 @@
 import React from 'react';
 import Word from './components/Word/Word';
+import WordEntry from './components/WordEntry/WordEntry';
 
 function App() {
+  const [wordGuess, setWordGuess] = React.useState('');
   return (
     <div>
-      <Word isWordEvaluated={false} guessWordValue='TESTS' />
+      <WordEntry onGuessEntered={(guess) => setWordGuess(guess)} />
+      <Word isWordEvaluated={false} guessWordValue={wordGuess} />
     </div>
   );
 }
