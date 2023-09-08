@@ -20,6 +20,7 @@ export default function WordEntry({ onGuessEntered }: IWordEntryProps) {
     onGuessEntered(validString);
     setValue(validString);
   };
+
   return (
     <StyledWordEntry
       autoFocus
