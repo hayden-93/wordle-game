@@ -1,11 +1,19 @@
 import React from 'react';
-import { StyledWordEntry } from './WordEntry.styles';
+import {
+  StyledEvaluateButton,
+  StyledWordEntry,
+  StyledWordEntryContainer,
+} from './WordEntry.styles';
 
 interface IWordEntryProps {
   onGuessEntered: (guess: string) => void;
+  onGuessComplete(): void;
 }
 
-export default function WordEntry({ onGuessEntered }: IWordEntryProps) {
+export default function WordEntry({
+  onGuessComplete,
+  onGuessEntered,
+}: IWordEntryProps) {
   const [value, setValue] = React.useState('');
 
   const getValidWordleString = (rawString: string) => {
@@ -22,12 +30,21 @@ export default function WordEntry({ onGuessEntered }: IWordEntryProps) {
   };
 
   return (
-    <StyledWordEntry
-      autoFocus
-      placeholder='Enter your guess...'
-      value={value}
-      maxLength={5}
-      onChange={(e) => handleLetterEntry(e)}
-    />
+    <StyledWordEntryContainer>
+      <StyledWordEntry
+        autoFocus
+        placeholder='Enter your guess...'
+        value={value}
+        maxLength={5}
+        onChange={(e) => handleLetterEntry(e)}
+      />
+      {value.length !== 5 ? (
+        ''
+      ) : (
+        <StyledEvaluateButton onClick={onGuessComplete}>
+          Guess
+        </StyledEvaluateButton>
+      )}
+    </StyledWordEntryContainer>
   );
 }
