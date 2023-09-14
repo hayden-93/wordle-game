@@ -22,11 +22,24 @@ export default function WordEntry({
 
     return validWordleString?.toUpperCase();
   };
+  const wordEntryRef = React.useRef<HTMLInputElement>(null);
 
   const handleLetterEntry = (e: any) => {
     const validString: string = getValidWordleString(e.target.value);
     onGuessEntered(validString);
     setValue(validString);
+  };
+
+  const handleEnterPressed = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      onGuessComplete();
+    }
+  };
+
+  const handleGuessComplete = () => {
+    setValue('');
+    wordEntryRef?.current?.focus();
+    onGuessComplete();
   };
 
   return (
@@ -37,11 +50,13 @@ export default function WordEntry({
         value={value}
         maxLength={5}
         onChange={(e) => handleLetterEntry(e)}
+        onKeyDown={(e) => handleEnterPressed(e)}
+        ref={wordEntryRef}
       />
       {value.length !== 5 ? (
         ''
       ) : (
-        <StyledEvaluateButton onClick={onGuessComplete}>
+        <StyledEvaluateButton onClick={handleGuessComplete}>
           Guess
         </StyledEvaluateButton>
       )}

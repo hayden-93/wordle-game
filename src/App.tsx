@@ -6,7 +6,10 @@ function App() {
   const [wordGuess, setWordGuess] = React.useState('');
   return (
     <div>
-      <WordEntry onGuessEntered={(guess) => setWordGuess(guess)} />
+      <WordEntry
+        onGuessComplete={() => setWordGuess('')}
+        onGuessEntered={(guess) => setWordGuess(guess)}
+      />
       <Word isWordEvaluated={false} guessWordValue={wordGuess} />
     </div>
   );
