@@ -5,6 +5,7 @@ export const StyledLetterButton = styled.button<{ accuracy: AccuracyEnum }>`
   width: 50px;
   height: 50px;
   border-radius: 2px;
+  border: 2px solid #787c7f;
   color: white;
   font-size: 30px;
   font-weight: bold;
