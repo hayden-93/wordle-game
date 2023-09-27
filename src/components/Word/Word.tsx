@@ -1,41 +1,41 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import Letter from '../Letter/Letter';
-import { AccuracyEnum } from '../Letter/Letter.styles';
-import { retrieveAnswer } from '../../utils/answer';
+import { AccuracyEnum } from '../../utils/accuracy';
 import { evaluateWordScore } from '../../utils/Evaluation';
+import { retrieveAnswer } from '../../utils/answerRetriever';
 
-export interface IWordProps {
+interface IWordProps {
   isWordEvaluated: boolean;
   guessWordValue: string;
 }
 
-export default function Word({ isWordEvaluated, guessWordValue }: IWordProps) {
-  const initalAccuracyArray = [
-    AccuracyEnum.None,
-    AccuracyEnum.None,
-    AccuracyEnum.None,
-    AccuracyEnum.None,
-    AccuracyEnum.None,
+export const Word = ({ isWordEvaluated, guessWordValue }: IWordProps) => {
+  const inititalAccuracyArray = [
+    AccuracyEnum.none,
+    AccuracyEnum.none,
+    AccuracyEnum.none,
+    AccuracyEnum.none,
+    AccuracyEnum.none,
   ];
 
-  const [evaluatedResults, setEvaluatedResults] =
-    React.useState<AccuracyEnum[]>(initalAccuracyArray);
+  const [isEvaluated, setIsEvaluated] = useState(false);
+  const [guessValue, setGuessValue] = useState('');
+  const [evaluatedResults, setEvaluatedResults] = useState<AccuracyEnum[]>(
+    inititalAccuracyArray
+  );
 
-  const [isEvaluated, setIsEvaluated] = React.useState(isWordEvaluated);
-  const [guessValue, setGuessValue] = React.useState(guessWordValue);
-
-  React.useEffect(() => {
+  useEffect(() => {
     const results = evaluateWordScore(
       guessValue,
       retrieveAnswer().toUpperCase()
     );
     setEvaluatedResults(results);
     setIsEvaluated(isWordEvaluated);
-  }, [isWordEvaluated, guessValue]);
-
-  React.useEffect(() => {
-    setIsEvaluated(isWordEvaluated);
   }, [isWordEvaluated]);
+
+  useEffect(() => {
+    setGuessValue(guessWordValue.padEnd(5, '_'));
+  }, [guessWordValue]);
 
   return (
     <div>
@@ -46,14 +46,14 @@ export default function Word({ isWordEvaluated, guessWordValue }: IWordProps) {
           return (
             <Letter
               key={'letter_' + letterIndex}
-              position={letterIndex}
               value={nextLetter}
               accuracy={
-                isEvaluated ? evaluatedResults[letterIndex] : AccuracyEnum.None
+                isEvaluated ? evaluatedResults[letterIndex] : AccuracyEnum.none
               }
+              position={letterIndex}
             />
           );
         })}
     </div>
   );
-}
+};
