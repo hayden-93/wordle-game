@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import {
   StyledEvaluateButton,
   StyledWordEntry,
@@ -6,34 +6,27 @@ import {
 } from './WordEntry.styles';
 
 interface IWordEntryProps {
-  onGuessEntered: (guess: string) => void;
+  onGuessEntered(guess: string): void;
   onGuessComplete(): void;
 }
 
-export default function WordEntry({
-  onGuessComplete,
+export const WordEntry = ({
   onGuessEntered,
-}: IWordEntryProps) {
-  const [value, setValue] = React.useState('');
+  onGuessComplete,
+}: IWordEntryProps) => {
+  const [value, setValue] = useState('');
+
+  const wordEntryRef = useRef<HTMLInputElement>(null);
 
   const getValidWordleString = (rawString: string) => {
-    const upperCaseString = rawString.toUpperCase();
     const validWordleString = rawString.replace(/[^a-z]/gi, '');
-
     return validWordleString?.toUpperCase();
   };
-  const wordEntryRef = React.useRef<HTMLInputElement>(null);
 
   const handleLetterEntry = (e: any) => {
     const validString: string = getValidWordleString(e.target.value);
     onGuessEntered(validString);
     setValue(validString);
-  };
-
-  const handleEnterPressed = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      onGuessComplete();
-    }
   };
 
   const handleGuessComplete = () => {
@@ -42,16 +35,23 @@ export default function WordEntry({
     onGuessComplete();
   };
 
+  const handleEnterPressed = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (value.length < 5) return;
+    if (e.key === 'Enter') {
+      handleGuessComplete();
+    }
+  };
+
   return (
     <StyledWordEntryContainer>
       <StyledWordEntry
         autoFocus
-        placeholder='Enter your guess...'
-        value={value}
         maxLength={5}
+        placeholder='Enter your guess...'
+        ref={wordEntryRef}
+        value={value}
         onChange={(e) => handleLetterEntry(e)}
         onKeyDown={(e) => handleEnterPressed(e)}
-        ref={wordEntryRef}
       />
       {value.length !== 5 ? (
         ''
@@ -62,4 +62,4 @@ export default function WordEntry({
       )}
     </StyledWordEntryContainer>
   );
-}
+};
