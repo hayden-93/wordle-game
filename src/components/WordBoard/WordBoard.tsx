@@ -1,18 +1,20 @@
-import React from 'react';
-import Word from '../Word/Word';
+import { useEffect, useState } from 'react';
+import { Word } from '../Word/Word';
+import { StyledWordBoard } from './WordBoard.styles';
+import { IGuess } from '../../utils/guess.model';
 
 interface IWordBoardProps {
   guess: string;
   currentPosition: number;
+  wordGuessesCallback(guesses: IGuess[]): void;
 }
 
-interface IGuess {
-  guessedWord: string;
-  evaluated: boolean;
-}
-
-export const WordBoard = ({ guess, currentPosition }: IWordBoardProps) => {
-  const initialGuessState = [
+export const WordBoard = ({
+  guess,
+  currentPosition,
+  wordGuessesCallback,
+}: IWordBoardProps) => {
+  const initialGuessState: IGuess[] = [
     { guessedWord: '', evaluated: false },
     { guessedWord: '', evaluated: false },
     { guessedWord: '', evaluated: false },
@@ -20,12 +22,11 @@ export const WordBoard = ({ guess, currentPosition }: IWordBoardProps) => {
     { guessedWord: '', evaluated: false },
     { guessedWord: '', evaluated: false },
   ];
-  const [wordGuesses, setWordGuesses] =
-    React.useState<IGuess[]>(initialGuessState);
+  const [wordGuesses, setWordGuesses] = useState<IGuess[]>(initialGuessState);
 
-  const [currentWordIndex, setCurrentWordIndex] = React.useState(0);
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (currentWordIndex > 5) return;
     const currentGuess: IGuess = { guessedWord: guess, evaluated: false };
     const updatedGuesses: IGuess[] = [
@@ -34,9 +35,9 @@ export const WordBoard = ({ guess, currentPosition }: IWordBoardProps) => {
       ...wordGuesses.slice(currentWordIndex + 1),
     ];
     setWordGuesses(updatedGuesses);
-  }, [guess]);
+  }, [currentWordIndex, guess, wordGuesses]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (currentWordIndex > 5) return;
     if (guess.length < 5) return;
 
@@ -49,10 +50,11 @@ export const WordBoard = ({ guess, currentPosition }: IWordBoardProps) => {
     console.log('updating guesses...');
     setWordGuesses(updatedGuesses);
     setCurrentWordIndex(currentPosition);
+    wordGuessesCallback(updatedGuesses.filter((guess) => guess.evaluated));
   }, [currentPosition]);
 
   return (
-    <>
+    <StyledWordBoard>
       {wordGuesses.map((wordGuess: IGuess, index: number) => {
         return (
           <Word
@@ -62,6 +64,6 @@ export const WordBoard = ({ guess, currentPosition }: IWordBoardProps) => {
           />
         );
       })}
-    </>
+    </StyledWordBoard>
   );
 };
