@@ -1,5 +1,5 @@
-import { retrieveAnswer } from './answer';
-import { AccuracyEnum } from '../components/Letter/Letter.styles';
+import { retrieveAnswer } from './answerRetriever';
+import { AccuracyEnum } from './accuracy';
 
 export interface ILetterScorePair {
   letter: string;

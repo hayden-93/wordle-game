@@ -1,4 +1,4 @@
-import { AccuracyEnum } from '../components/Letter/Letter.styles';
+import { AccuracyEnum } from '../utils/accuracy';
 import { evaluateWordScore } from '../utils/Evaluation';
 
 describe('Word evaluation tests', () => {
